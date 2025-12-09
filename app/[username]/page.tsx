@@ -18,10 +18,11 @@ export default async function ProfilePage({ params }: Props) {
   }
 
   return (
-    <main className="min-h-screen flex flex-col">
-      <div className="flex-1 flex flex-col items-center px-6 py-16">
+    <main className="min-h-screen flex flex-col items-center px-6 py-16">
+      {/* Single floating card */}
+      <div className="card w-full max-w-md text-center">
         {/* Avatar */}
-        <div className="w-24 h-24 bg-[#FFDD00] rounded-full flex items-center justify-center text-4xl font-bold">
+        <div className="w-24 h-24 bg-[#FFDD00] rounded-full flex items-center justify-center text-4xl font-bold mx-auto">
           {(user.name?.[0] || user.username[0]).toUpperCase()}
         </div>
 
@@ -32,9 +33,9 @@ export default async function ProfilePage({ params }: Props) {
         <p className="text-[#6B7280]">@{user.username}</p>
 
         {/* Links */}
-        <div className="mt-8 w-full max-w-md space-y-3">
+        <div className="mt-8 space-y-3">
           {user.links.length === 0 ? (
-            <p className="text-center text-[#6B7280] py-8">
+            <p className="text-[#6B7280] py-4">
               No links yet.
             </p>
           ) : (
@@ -44,7 +45,7 @@ export default async function ProfilePage({ params }: Props) {
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full bg-white text-black text-center font-semibold py-4 px-6 rounded-full border border-[#E5E5E5] hover:border-[#FFDD00] hover:shadow-md transition-all"
+                className="block w-full bg-[#F7F7F7] text-black text-center font-semibold py-4 px-6 rounded-full border border-[#E5E5E5] hover:border-[#FFDD00] hover:bg-white transition-all"
               >
                 {link.title}
               </a>
@@ -53,8 +54,8 @@ export default async function ProfilePage({ params }: Props) {
         </div>
       </div>
 
-      {/* Footer CTA */}
-      <div className="text-center pb-8">
+      {/* Footer CTA - outside card */}
+      <div className="mt-8 text-center">
         <a
           href="/"
           className="text-sm text-[#6B7280] hover:text-black transition-colors"

@@ -27,7 +27,7 @@ export default async function Home() {
           </div>
         </header>
         
-        <div className="flex flex-col items-center px-6 pt-20 pb-32">
+        <div className="flex flex-col items-center px-6 pt-20 pb-32 glow">
           <h1 className="text-5xl sm:text-6xl font-bold text-black text-center leading-tight max-w-2xl">
             Your links,<br />all in one place
           </h1>
@@ -70,7 +70,7 @@ export default async function Home() {
             Let's set up your page. Pick a username that people will remember.
           </p>
           
-          <div className="mt-10 w-full max-w-md bg-white rounded-xl p-6 shadow-sm border border-[#E5E5E5]">
+          <div className="card mt-10 w-full max-w-md">
             <form action={claimUsername}>
               <label className="block text-sm font-medium text-[#6B7280] mb-2">
                 Your URL
@@ -113,7 +113,7 @@ export default async function Home() {
       
       <div className="max-w-2xl mx-auto px-6 py-8">
         {/* Profile Card */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-[#E5E5E5] text-center">
+        <div className="card text-center">
           <div className="w-16 h-16 bg-[#FFDD00] rounded-full flex items-center justify-center text-2xl mx-auto">
             {(dbUser.name?.[0] || dbUser.username[0]).toUpperCase()}
           </div>
@@ -131,11 +131,11 @@ export default async function Home() {
             >
               View my page
             </a>
-            </div>
           </div>
+        </div>
 
         {/* Add Link Form */}
-        <div className="mt-6 bg-white rounded-xl p-6 shadow-sm border border-[#E5E5E5]">
+        <div className="card mt-6">
           <h2 className="text-lg font-bold text-black mb-4">Add a new link</h2>
           <form action={addLink} className="space-y-4">
             <div>
@@ -172,7 +172,7 @@ export default async function Home() {
         </div>
 
         {/* Links List */}
-        <div className="mt-6 bg-white rounded-xl p-6 shadow-sm border border-[#E5E5E5]">
+        <div className="card mt-6">
           <h2 className="text-lg font-bold text-black mb-4">
             My Links ({dbUser.links.length})
           </h2>
