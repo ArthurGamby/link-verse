@@ -3,6 +3,7 @@ import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
 import prisma from "../lib/prisma"
 import { claimUsername, addLink, deleteLink } from "./actions"
 
+
 export default async function Home() {
   const user = await currentUser()
 
@@ -122,7 +123,16 @@ export default async function Home() {
           <p className="mt-1 text-[#6B7280]">
             linkverse.app/{dbUser.username}
           </p>
-        </div>
+          <div className="mt-4 flex justify-center gap-2">
+            <a
+              href={`/${dbUser.username}`}
+              target="_blank"
+              className="bg-[#FFDD00] hover:bg-[#f5d400] text-black rounded-full font-medium px-5 py-2 text-sm transition-colors"
+            >
+              View my page
+            </a>
+            </div>
+          </div>
 
         {/* Add Link Form */}
         <div className="mt-6 bg-white rounded-xl p-6 shadow-sm border border-[#E5E5E5]">
