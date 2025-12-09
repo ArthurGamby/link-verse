@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation"
+import { clerkClient } from "@clerk/nextjs/server"
 import prisma from "../../lib/prisma"
 
 type Props = {
@@ -17,14 +18,26 @@ export default async function ProfilePage({ params }: Props) {
     notFound()
   }
 
+  // Fetch Clerk user to get profile image
+  const client = await clerkClient()
+  const clerkUser = await client.users.getUser(user.clerkId)
+
   return (
     <main className="min-h-screen flex flex-col items-center px-6 py-16">
       {/* Single floating card */}
       <div className="card w-full max-w-md text-center">
         {/* Avatar */}
-        <div className="w-24 h-24 bg-[#FFDD00] rounded-full flex items-center justify-center text-4xl font-bold mx-auto">
-          {(user.name?.[0] || user.username[0]).toUpperCase()}
-        </div>
+        {clerkUser.imageUrl ? (
+          <img
+            src={clerkUser.imageUrl}
+            alt={user.name || user.username}
+            className="w-24 h-24 rounded-full mx-auto object-cover"
+          />
+        ) : (
+          <div className="w-24 h-24 bg-[#FFDD00] rounded-full flex items-center justify-center text-4xl font-bold mx-auto">
+            {(user.name?.[0] || user.username[0]).toUpperCase()}
+          </div>
+        )}
 
         {/* Name & Username */}
         <h1 className="mt-4 text-2xl font-bold text-black">
