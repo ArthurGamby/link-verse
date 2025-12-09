@@ -10,7 +10,19 @@ datasource db {
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
+  username  String   @unique // Important for the public profile URL
+  clerkId   String   @unique // Links to Clerk Auth
   name      String?
+  links     Link[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Link {
+  id        Int      @id @default(autoincrement())
+  title     String
+  url       String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
 }
