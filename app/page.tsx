@@ -1,5 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server"
 import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
+import { ExternalLink, Trash2, Link } from "lucide-react"
 import prisma from "../lib/prisma"
 import { claimUsername, addLink, deleteLink } from "./actions"
 
@@ -127,9 +128,10 @@ export default async function Home() {
             <a
               href={`/${dbUser.username}`}
               target="_blank"
-              className="bg-[#FFDD00] hover:bg-[#f5d400] text-black rounded-full font-medium px-5 py-2 text-sm transition-colors"
+              className="inline-flex items-center gap-2 bg-[#FFDD00] hover:bg-[#f5d400] text-black rounded-full font-medium px-5 py-2 text-sm transition-colors"
             >
               View my page
+              <ExternalLink size={16} />
             </a>
           </div>
         </div>
@@ -179,7 +181,7 @@ export default async function Home() {
           
           {dbUser.links.length === 0 ? (
             <div className="text-center py-8">
-              <div className="text-4xl mb-3">🔗</div>
+              <Link size={48} className="mx-auto text-[#E5E5E5] mb-3" />
               <p className="text-[#6B7280]">
                 No links yet. Add your first one above!
               </p>
@@ -199,9 +201,9 @@ export default async function Home() {
                     <input type="hidden" name="linkId" value={link.id} />
                     <button
                       type="submit"
-                      className="text-[#6B7280] hover:text-red-500 font-medium text-sm px-3 py-1 rounded-full hover:bg-red-50 transition-colors"
+                      className="p-2 text-[#6B7280] hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
                     >
-                      Delete
+                      <Trash2 size={18} />
                     </button>
                   </form>
                 </div>
