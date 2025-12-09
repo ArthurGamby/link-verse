@@ -1,7 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server"
 import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
 import prisma from "../lib/prisma"
-import { claimUsername } from "./actions"
+import { claimUsername, addLink, deleteLink } from "./actions"
 
 export default async function Home() {
   const user = await currentUser()
@@ -122,25 +122,56 @@ export default async function Home() {
           <p className="mt-1 text-[#6B7280]">
             linkverse.app/{dbUser.username}
           </p>
-          <button className="mt-4 border border-[#E5E5E5] hover:border-[#FFDD00] text-black rounded-full font-medium px-5 py-2 text-sm transition-colors">
-            Copy link
-          </button>
         </div>
 
-        {/* Links Card */}
+        {/* Add Link Form */}
         <div className="mt-6 bg-white rounded-xl p-6 shadow-sm border border-[#E5E5E5]">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-lg font-bold text-black">My Links</h2>
-            <button className="bg-[#FFDD00] hover:bg-[#f5d400] text-black rounded-full font-semibold px-5 py-2 text-sm">
-              + Add link
+          <h2 className="text-lg font-bold text-black mb-4">Add a new link</h2>
+          <form action={addLink} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-[#6B7280] mb-1">
+                Title
+              </label>
+              <input
+                type="text"
+                name="title"
+                placeholder="My Website"
+                required
+                className="w-full bg-[#F7F7F7] text-black rounded-xl border border-[#E5E5E5] px-4 py-3 outline-none focus:border-[#FFDD00] focus:ring-2 focus:ring-[#FFDD00]/20 transition-all placeholder:text-[#9CA3AF]"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-[#6B7280] mb-1">
+                URL
+              </label>
+              <input
+                type="url"
+                name="url"
+                placeholder="https://example.com"
+                required
+                className="w-full bg-[#F7F7F7] text-black rounded-xl border border-[#E5E5E5] px-4 py-3 outline-none focus:border-[#FFDD00] focus:ring-2 focus:ring-[#FFDD00]/20 transition-all placeholder:text-[#9CA3AF]"
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-[#FFDD00] hover:bg-[#f5d400] text-black rounded-full font-semibold py-3 transition-colors"
+            >
+              Add link
             </button>
-          </div>
+          </form>
+        </div>
+
+        {/* Links List */}
+        <div className="mt-6 bg-white rounded-xl p-6 shadow-sm border border-[#E5E5E5]">
+          <h2 className="text-lg font-bold text-black mb-4">
+            My Links ({dbUser.links.length})
+          </h2>
           
           {dbUser.links.length === 0 ? (
-            <div className="text-center py-12">
+            <div className="text-center py-8">
               <div className="text-4xl mb-3">🔗</div>
               <p className="text-[#6B7280]">
-                No links yet. Add your first one!
+                No links yet. Add your first one above!
               </p>
             </div>
           ) : (
@@ -148,15 +179,21 @@ export default async function Home() {
               {dbUser.links.map((link) => (
                 <div
                   key={link.id}
-                  className="flex items-center justify-between p-4 bg-[#F7F7F7] rounded-xl border border-[#E5E5E5] hover:border-[#FFDD00] transition-colors"
+                  className="flex items-center justify-between p-4 bg-[#F7F7F7] rounded-xl border border-[#E5E5E5]"
                 >
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <p className="font-semibold text-black truncate">{link.title}</p>
                     <p className="text-sm text-[#6B7280] truncate">{link.url}</p>
                   </div>
-                  <button className="ml-4 text-[#6B7280] hover:text-black">
-                    •••
-                  </button>
+                  <form action={deleteLink} className="ml-4">
+                    <input type="hidden" name="linkId" value={link.id} />
+                    <button
+                      type="submit"
+                      className="text-[#6B7280] hover:text-red-500 font-medium text-sm px-3 py-1 rounded-full hover:bg-red-50 transition-colors"
+                    >
+                      Delete
+                    </button>
+                  </form>
                 </div>
               ))}
             </div>

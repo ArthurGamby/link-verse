@@ -2,6 +2,7 @@
 
 import { currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
+import { revalidatePath } from "next/cache"
 import prisma from "../lib/prisma"
 
 export async function claimUsername(formData: FormData) {
@@ -33,4 +34,68 @@ export async function claimUsername(formData: FormData) {
   })
 
   redirect("/")
+}
+
+export async function addLink(formData: FormData) {
+  const user = await currentUser()
+  
+  if (!user) {
+    throw new Error("Not authenticated")
+  }
+
+  const title = formData.get("title") as string
+  const url = formData.get("url") as string
+
+  if (!title || !url) {
+    throw new Error("Title and URL are required")
+  }
+
+  // Find the database user
+  const dbUser = await prisma.user.findUnique({
+    where: { clerkId: user.id },
+  })
+
+  if (!dbUser) {
+    throw new Error("User not found")
+  }
+
+  await prisma.link.create({
+    data: {
+      title,
+      url,
+      userId: dbUser.id,
+    },
+  })
+
+  revalidatePath("/")
+}
+
+export async function deleteLink(formData: FormData) {
+  const user = await currentUser()
+  
+  if (!user) {
+    throw new Error("Not authenticated")
+  }
+
+  const linkId = formData.get("linkId") as string
+
+  if (!linkId) {
+    throw new Error("Link ID is required")
+  }
+
+  // Verify the link belongs to the current user
+  const link = await prisma.link.findUnique({
+    where: { id: parseInt(linkId) },
+    include: { user: true },
+  })
+
+  if (!link || link.user.clerkId !== user.id) {
+    throw new Error("Link not found or unauthorized")
+  }
+
+  await prisma.link.delete({
+    where: { id: parseInt(linkId) },
+  })
+
+  revalidatePath("/")
 }
