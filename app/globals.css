@@ -26,7 +26,8 @@ html {
 }
 
 body {
-  background: var(--background);
+  background: var(--background) url('/background.svg') center/cover no-repeat fixed;
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
+  min-height: 100vh;
 }
